@@ -1,3 +1,4 @@
+kubeconfig
 # OSX leaves these everywhere on SMB shares
 ._*
 *.history
