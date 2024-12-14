@@ -6,9 +6,9 @@ spec:
   amiFamily: Bottlerocket
   role: "Karpenter-cluster-dev-2024121414392788340000001c"
   subnetSelectorTerms:
-    - id: subnet-03fbabb7a85656b88
-    - id: subnet-0ebe7f506766976ef
-    - id: subnet-04d289333f67dd2ed
+    - id: subnet-0cc979119db042a1b
+    - id: subnet-042d268ab22b5c7e3
+    - id: subnet-0acaf30a31a939b37
   securityGroupSelectorTerms:
     - tags:
         karpenter.sh/discovery: cluster-dev
