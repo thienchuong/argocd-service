@@ -1,0 +1,16 @@
+external-dns:
+  serviceAccount:
+    create: true
+    name: external-dns
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::267583709295:role/external-dns-dev
+  logLevel: debug
+  sources:
+    - ingress
+  policy: upsert-only
+  registry: txt
+  domainFilters: ["chuong.click"]
+  provider:
+    name: aws
+  extraArgs:
+    - --aws-zone-type=public

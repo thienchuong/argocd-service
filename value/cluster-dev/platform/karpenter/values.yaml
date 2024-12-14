@@ -1,0 +1,13 @@
+karpenter:
+  replicas: 1
+  serviceAccount:
+    create: true
+    name: "karpenter"
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::267583709295:role/KarpenterController-20241214143928851900000022
+  settings:
+    clusterName: "cluster-dev"
+    clusterEndpoint: "https://E4FCB6CBF78EF8F7D0694C5536D8C370.gr7.ap-southeast-1.eks.amazonaws.com"
+    interruptionQueue: "Karpenter-cluster-dev"
+    featureGates:
+      spotToSpotConsolidation: true

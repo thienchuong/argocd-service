@@ -1,0 +1,44 @@
+{{- if .Values.ingress.enabled -}}
+{{- $Name := .Values.serviceName | trunc 63 | trimSuffix "-" }}
+{{- $ingressPaths := .Values.ingress.paths -}}
+{{- $ReleaseService := .Release.Service }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $Name }}
+  labels:
+    app.kubernetes.io/name: {{ $Name }}
+    app.kubernetes.io/instance: {{ $Name }}
+    app.kubernetes.io/managed-by: {{ $ReleaseService }} 
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+{{- if .Values.ingress.tls }}
+  tls:
+  {{- range .Values.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . | quote }}
+      {{- end }}
+      secretName: {{ .secretName }}
+  {{- end }}
+{{- end }}
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+	{{- range $ingressPaths }}
+          - path: {{ . }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $Name }}
+                port:
+                  name: http
+	{{- end }}
+  {{- end }}
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+{{- end }}

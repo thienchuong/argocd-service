@@ -1,0 +1,168 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-system-api-server
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/kubernetes
+data:
+  k8s-system-api-server.json: |
+{{ .Files.Get "grafana-dashboards/k8s-system-api-server.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-system-coredns
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/kubernetes
+data:
+  k8s-system-coredns.json: |
+{{ .Files.Get "grafana-dashboards/k8s-system-coredns.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-views-global
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/kubernetes
+data:
+  k8s-views-global.json: |
+{{ .Files.Get "grafana-dashboards/k8s-views-global.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-views-namespaces
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/kubernetes
+data:
+  k8s-views-namespaces.json: |
+{{ .Files.Get "grafana-dashboards/k8s-views-namespaces.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-views-nodes
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/kubernetes
+data:
+  k8s-views-nodes.json: |
+{{ .Files.Get "grafana-dashboards/k8s-views-nodes.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-views-pods
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/kubernetes
+data:
+  k8s-views-pods.json: |
+{{ .Files.Get "grafana-dashboards/k8s-views-pods.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-views-nodes-full
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  # annotations:
+  #   grafana_folder: /tmp/dashboards/kubernetes
+data:
+  k8s-views-nodes-full.json: |
+{{ .Files.Get "grafana-dashboards/k8s-views-nodes-full.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-views-deployment
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/kubernetes
+data:
+  k8s-views-deployment.json: |
+{{ .Files.Get "grafana-dashboards/k8s-views-deployment.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-views-statefulset
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/kubernetes
+data:
+  k8s-views-statefulset.json: |
+{{ .Files.Get "grafana-dashboards/k8s-views-statefulset.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nsq
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/nsq
+data:
+  nsq.json: |
+{{ .Files.Get "grafana-dashboards/nsq.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ingress-nginx
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/ingress-nginx
+data:
+  ingress-nginx.json: |
+{{ .Files.Get "grafana-dashboards/ingress-nginx.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: access-management
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/access-management
+data:
+  access-management.json: |
+{{ .Files.Get "grafana-dashboards/access-management.json" | indent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: /tmp/dashboards/rds
+data:
+  mysql.json: |
+{{ .Files.Get "grafana-dashboards/mysql.json" | indent 4 }}

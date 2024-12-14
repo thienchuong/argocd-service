@@ -1,0 +1,13 @@
+spec:
+  project: cluster-dev
+  env: cluster-dev
+  destination:
+    server: https://kubernetes.default.svc
+    cluster: cluster-dev
+    folder: platform
+  source:
+    repoURL: https://github.com/thienchuong/argocd-app.git
+    targetRevision: main
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
