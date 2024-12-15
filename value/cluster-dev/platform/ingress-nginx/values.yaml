@@ -94,7 +94,7 @@ ingress-nginx:
           prometheus.io/scrape: "true"
           prometheus.io/port: "10254"
       serviceMonitor:
-        enabled: true
+        enabled: false
   tcp:
   udp:
   portNamePrefix: ""
