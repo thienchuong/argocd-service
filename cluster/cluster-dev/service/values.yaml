@@ -4,7 +4,7 @@ spec:
     server: https://kubernetes.default.svc
     cluster: cluster-dev
     folder: service
-    namespace: prod
+    namespace: dev
   source:
     repoURL: https://github.com/thienchuong/argocd-service.git
     branch: main

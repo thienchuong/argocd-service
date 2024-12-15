@@ -29,8 +29,8 @@ service:
   service:
     enabled: true
     type: ClusterIP
-    port: 8080
-    containerPort: 8080
+    port: 3000
+    containerPort: 3000
   ingress:
     enabled: false
   resources:
@@ -42,8 +42,8 @@ service:
       memory: 256Mi
   autoscaling:
     enabled: true
-    minReplicas: 0
-    maxReplicas: 0
+    minReplicas: 1
+    maxReplicas: 2
     metrics:
       - type: Resource
         resource:
@@ -51,11 +51,8 @@ service:
           target:
             type: Utilization
             averageUtilization: 50
-  nodeSelector:
-    worker: service
-  tolerations:
-    - key: services
-      effect: NoSchedule
+  nodeSelector: {}
+  tolerations: []
   livenessProbe:
     httpGet:
       path: /
@@ -71,7 +68,7 @@ service:
   configmap:
     enabled: true
     data:
-      HELLO_MESSAGE: test change message hello
+      SERVER_URL: backend
   topologySpreadConstraints:
     - maxSkew: 1
       topologyKey: topology.kubernetes.io/zone
