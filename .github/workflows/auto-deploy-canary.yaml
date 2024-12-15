@@ -1,0 +1,40 @@
+name: Auto deploy to dev environment
+
+on:
+  repository_dispatch:
+    types:
+      - deploy-canary
+
+
+jobs:
+  auto-deploy-dev:
+    name: Auto deploy to dev environment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ORG_CI_TOKEN }}
+          ref: main
+      
+      # This will return the image tag if the image tag input value is the same as the yml value
+      - name: Check image tag for redeploy
+        uses: mikefarah/yq@v4.9.5
+        id: check_image_tag
+        with:
+          cmd: |
+            yq eval '.service.image.tag | select(. == "${{ github.event.client_payload.image_tag }}")' value/cluster-dev/service/canary-${{ github.event.client_payload.service }}/values.yaml
+
+      - name: Update image tag
+        uses: mikefarah/yq@v4.9.5
+        if: steps.check_image_tag.outputs.result == ''
+        with:
+          cmd: |
+            yq -e eval -i '.service.image.tag = "${{ github.event.client_payload.image_tag }}"' value/cluster-dev/service/canary-${{ github.event.client_payload.service }}/values.yaml
+
+      - name: Commit image tag
+        uses: EndBug/add-and-commit@v9
+        if: steps.check_image_tag.outputs.result == ''
+        with:
+          committer_name: github-ci
+          message: '[dev] Deploy canary-${{ github.event.client_payload.repo }} version ${{ github.event.client_payload.image_tag }}'
+          pull: '-q -v'
