@@ -21,3 +21,6 @@ clusters:
     frontend:
       enabled: true
       autoSync: true
+    canary-frontend:
+      enabled: true
+      autoSync: true

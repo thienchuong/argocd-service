@@ -1,15 +1,15 @@
-apiVersion: v1
-kind: Secret
-metadata:
- name: argocd-service
- namespace: argocd
- labels:
-   argocd.argoproj.io/secret-type: repository
-stringData:
- type: git
- url: https://github.com/thienchuong/argocd-service.git
- password: "xxx" # create a github PAT and replace here, this is just do at first setup, will remove after kubectl apply
- username: argocd
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#  name: argocd-service
+#  namespace: argocd
+#  labels:
+#    argocd.argoproj.io/secret-type: repository
+# stringData:
+#  type: git
+#  url: https://github.com/thienchuong/argocd-service.git
+#  password: "xxx" # create a github PAT and replace here, this is just do at first setup, will remove after kubectl apply
+#  username: argocd
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
@@ -41,7 +41,7 @@ spec:
     server: https://kubernetes.default.svc
   project: cluster-dev
   source:
-    path: clusters/cluster-dev/service
+    path: cluster/cluster-dev/service
     repoURL: https://github.com/thienchuong/argocd-service.git
     targetRevision: main
 ---
@@ -56,6 +56,6 @@ spec:
     server: https://kubernetes.default.svc
   project: cluster-dev
   source:
-    path: clusters/cluster-dev/platform
+    path: cluster/cluster-dev/platform
     repoURL: https://github.com/thienchuong/argocd-service.git
     targetRevision: main
