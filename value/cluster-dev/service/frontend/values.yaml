@@ -53,18 +53,8 @@ service:
             averageUtilization: 50
   nodeSelector: {}
   tolerations: []
-  livenessProbe:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 15
-    timeoutSeconds: 15
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 15
-    timeoutSeconds: 15
+  livenessProbe: {}
+  readinessProbe: {}
   configmap:
     enabled: true
     data:
