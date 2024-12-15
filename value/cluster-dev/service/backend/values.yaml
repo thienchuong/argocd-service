@@ -15,7 +15,7 @@ service:
   podAnnotations:
     reloader.stakater.com/auto: "true"
   image:
-    repository: 214259409527.dkr.ecr.ap-southeast-1.amazonaws.com/backend
+    repository: 267583709295.dkr.ecr.ap-southeast-1.amazonaws.com/backend
     tag: v1.0.7
     pullPolicy: IfNotPresent
   lifecycle: {}

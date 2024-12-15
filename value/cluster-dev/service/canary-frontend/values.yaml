@@ -15,7 +15,7 @@ service:
   podAnnotations:
     reloader.stakater.com/auto: "true"
   image:
-    repository: 214259409527.dkr.ecr.ap-southeast-1.amazonaws.com/canary-frontend
+    repository: 267583709295.dkr.ecr.ap-southeast-1.amazonaws.com/canary-frontend
     tag: canary-123
     pullPolicy: IfNotPresent
   lifecycle: {}
