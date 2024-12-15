@@ -6,7 +6,7 @@ spec:
     cluster: cluster-dev
     folder: platform
   source:
-    repoURL: https://github.com/thienchuong/argocd-app.git
+    repoURL: https://github.com/thienchuong/argocd-service.git
     targetRevision: main
   syncPolicy:
     syncOptions:
