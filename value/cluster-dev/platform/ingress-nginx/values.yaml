@@ -50,7 +50,7 @@ ingress-nginx:
       external:
         enabled: true
       annotations:
-        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:ap-southeast-1:214259409527:certificate/05cb0b47-7ea4-4d3f-a5df-ce530e8719a3
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:ap-southeast-1:267583709295:certificate/d995ad36-6b51-4604-98bf-9ab0acfa2ed1
         service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
         service.beta.kubernetes.io/aws-load-balancer-type: external
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
