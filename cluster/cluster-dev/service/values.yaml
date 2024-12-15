@@ -6,7 +6,7 @@ spec:
     folder: service
     namespace: prod
   source:
-    repoURL: https://github.com/thienchuong/argocd-app.git
+    repoURL: https://github.com/thienchuong/argocd-service.git
     branch: main
     targetRevision: main
   slackChannel: TBD
