@@ -1,0 +1,81 @@
+service:
+  serviceName: canary-frontend
+  migration:
+    enabled: false
+    command:
+      - /bin/sh
+      - -c
+      - npm run migration:run
+  revisionHistoryLimit: 1
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 0%
+    type: RollingUpdate
+  podAnnotations:
+    reloader.stakater.com/auto: "true"
+  image:
+    repository: 214259409527.dkr.ecr.ap-southeast-1.amazonaws.com/canary-frontend
+    tag: v1.0.7
+    pullPolicy: IfNotPresent
+  lifecycle: {}
+  envFrom:
+    - configMapRef:
+        name: canary-frontend-config
+  serviceAccount:
+    create: false
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 8080
+    containerPort: 8080
+  ingress:
+    enabled: false
+  resources:
+    limits:
+      cpu: 512m
+      memory: 512Mi
+    requests:
+      cpu: 256m
+      memory: 256Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 0
+    maxReplicas: 0
+    metrics:
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 50
+  nodeSelector:
+    worker: service
+  tolerations:
+    - key: services
+      effect: NoSchedule
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 15
+    timeoutSeconds: 15
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 15
+    timeoutSeconds: 15
+  configmap:
+    enabled: true
+    data:
+      HELLO_MESSAGE: test change message hello
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: topology.kubernetes.io/zone
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/name: frontend
