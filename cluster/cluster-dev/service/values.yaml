@@ -1,0 +1,23 @@
+spec:
+  project: cluster-dev
+  destination:
+    server: https://kubernetes.default.svc
+    cluster: cluster-dev
+    folder: service
+    namespace: prod
+  source:
+    repoURL: https://github.com/thienchuong/argocd-app.git
+    branch: main
+    targetRevision: main
+  slackChannel: TBD
+clusters:
+  cluster-dev:
+    ingress:
+      enabled: true
+      autoSync: true
+    backend:
+      enabled: true
+      autoSync: true
+    frontend:
+      enabled: true
+      autoSync: true

@@ -1,0 +1,88 @@
+argo-cd:
+  fullnameOverride: "argocd"
+  global:
+    nodeSelector: {}
+    tolerations: []
+  controller:
+    replicas: 1
+    enableStatefulSet: true
+    args:
+      statusProcessors: "20"
+      operationProcessors: "10"
+      appResyncPeriod: "45"
+      selfHealTimeout: "5"
+      repoServerTimeoutSeconds: "60"
+    serviceAccount:
+      create: true
+      name: argocd-application-controller
+  server:
+    replicas: 2
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 1024m
+        memory: 512Mi
+    serviceAccount:
+      create: true
+      name: argocd-server
+    ingress:
+      enabled: true
+      annotations:
+      ingressClassName: "ingress-nginx"
+      hosts:
+        - argocd.chuong.click
+      tls: []
+  configs:
+    admin.enabled: true
+    cm:
+      create: true
+      exec.enabled: true
+      timeout.reconciliation: 10s
+      url: https://argocd.chuong.click
+      application.instanceLabelKey: argocd.argoproj.io/instance
+      dex.config: |-
+        connectors:
+            - config:
+                issuer: https://accounts.google.com
+                clientID: "xxx"
+                clientSecret: "xxx"
+              type: oidc
+              id: google
+              name: Google
+      resource.customizations.ignoreDifferences.admissionregistration.k8s.io_MutatingWebhookConfiguration:
+        |-
+        jqPathExpressions:
+            - '.webhooks[]?.clientConfig.caBundle'
+      accounts.image-updater: apiKey
+    params:
+      create: true
+      server.insecure: true
+
+    rbac:
+      policy.default: role:admin
+      policy.csv: |-
+        g, thienchuong004@gmail, role:admin
+      scopes: "[email, group]"
+  redis:
+    enabled: true
+    name: redis
+    resources:
+      limits:
+        memory: 1024Mi
+      requests:
+        cpu: 512m
+        memory: 512Mi
+    tolerations: []
+    nodeSelector: {}
+  redis-ha:
+    enabled: true
+    tolerations: []
+    nodeSelector: {}
+  repoServer:
+    name: repo-server
+    replicas: 2
+    autoscaling:
+      enabled: true
+    tolerations: []
+    nodeSelector: {}

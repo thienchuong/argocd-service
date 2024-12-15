@@ -1,0 +1,100 @@
+loki:
+  loki:
+    enabled: true
+    commonConfig:
+      replication_factor: 3
+    auth_enabled: false
+    server:
+      http_server_read_timeout: 600s
+      http_server_write_timeout: 600s
+      log_level: debug
+      grpc_server_max_recv_msg_size: 104857600
+      grpc_server_max_send_msg_size: 104857600
+    limits_config:
+      split_queries_by_interval: 2h
+      max_query_parallelism: 24
+    query_scheduler:
+      max_outstanding_requests_per_tenant: 4096
+    querier:
+      max_concurrent: 20
+      query_timeout: 5m
+      extra_query_delay: 30s
+      engine:
+        timeout: 5m
+        max_look_back_period: 2m
+      query_ingesters_within: 3h
+    frontend:
+      max_outstanding_per_tenant: 1024
+    frontend_worker:
+      match_max_concurrent: true
+    query_range:
+      split_queries_by_interval: 2h
+      max_retries: 5
+      cache_results: true
+      parallelise_shardable_queries: true
+      results_cache:
+        cache:
+          embedded_cache:
+            enabled: true
+            max_size_mb: 100
+    storage:
+      bucketNames:
+        chunks: loki-dev-267583709295
+        ruler: loki-dev-267583709295
+        admin: loki-dev-267583709295
+      type: 's3'
+      s3:
+        s3: s3://ap-southeast-1/loki-dev-267583709295
+        bucketnames: loki-dev-267583709295
+        region: ap-southeast-1
+        s3forcepathstyle: false
+    singleBinary:
+      replicas: 3
+  serviceAccount:
+    create: true
+    name: loki
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::267583709295:role/loki-logs-dev
+  backend:
+    replicas: 2
+    persistence:
+      volumeClaimsEnabled: true
+      enableStatefulSetAutoDeletePVC: true
+      size: 10Gi
+      storageClass: gp2
+    nodeSelector: {}
+    tolerations: []
+  write:
+    replicas: 2
+    persistence:
+      volumeClaimsEnabled: true
+      enableStatefulSetAutoDeletePVC: true
+      size: 10Gi
+      storageClass: gp2
+    nodeSelector: {}
+    tolerations: []
+  read:
+    replicas: 2
+    nodeSelector: {}
+    tolerations: []
+  gateway:
+    replicas: 2
+    enabled: true
+    verboseLogging: true
+    autoscaling:
+      enabled: false
+promtail:
+  enabled: true
+  tolerations:
+    - operator: Exists
+  config:
+    clients:
+      - url: http://loki-gateway:80/loki/api/v1/push
+        tenant_id: 1
+    snippets:
+      pipelineStages:
+      - cri: {}
+      - decolorize: {}
+      - drop:
+          source:     "namespace"
+          expression: "(kube-public|kube-system|kubernetes-dashboard|logging|monitoring|default|ll-sentry|thanos|proxysql|metabase)"

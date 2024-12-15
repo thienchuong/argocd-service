@@ -1,0 +1,7 @@
+reloader:
+  kubernetes:
+    host: https://kubernetes.default
+  reloader:
+    deployment:
+      nodeSelector: {}
+      tolerations: []

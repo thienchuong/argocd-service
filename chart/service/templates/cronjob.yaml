@@ -1,0 +1,41 @@
+{{- $Name := .Values.serviceName | trunc 63 | trimSuffix "-" }}
+{{- $ReleaseName := .Release.Name }}
+{{- $ReleaseService := .Release.Service }}
+{{- $ImageRepository := .Values.image.repository }}
+{{- $ImageTag := .Values.image.tag }}
+{{- $ImagePullPolicy := .Values.image.pullPolicy }}
+{{- $EnvFrom := .Values.envFrom }}
+{{- $Env := .Values.env}}
+
+{{- range $cronjob := .Values.cronjobs }}
+{{- if $cronjob.enabled -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $ReleaseName }}-{{ $cronjob.name }}
+  labels:
+    app.kubernetes.io/name: {{ $Name }}-{{ $cronjob.name }}
+    app.kubernetes.io/instance: {{ $ReleaseName }}-{{ $cronjob.name }}
+    app.kubernetes.io/managed-by: {{ $ReleaseService }}
+spec:
+  concurrencyPolicy: Forbid
+  schedule: {{ $cronjob.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ $Name }}-{{ $cronjob.name }}
+            image: "{{ $ImageRepository }}:{{ $ImageTag }}"
+            command: {{ $cronjob.command | toJson }}
+            {{- with $EnvFrom }}
+            envFrom:
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            resources:
+              {{- toYaml $cronjob.resources | nindent 16 }}
+          activeDeadlineSeconds: {{ $cronjob.activeDeadlineSeconds }}
+          restartPolicy: Never
+---
+{{- end }}
+{{- end }}

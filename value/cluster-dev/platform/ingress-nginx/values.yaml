@@ -1,0 +1,101 @@
+ingress-nginx:
+  controller:
+    config:
+      log-format-upstream: >-
+        [$time_local] client=$remote_addr method=$request_method request="$request"
+        request_uri="$request_uri" host="$http_host" request_length=$request_length
+        http.status_code=$status bytes_sent=$bytes_sent body_bytes_sent=$body_bytes_sent
+        referer=$http_referer remote_user=$remote_user user_agent="$http_user_agent"
+        upstream_addr=$upstream_addr
+        upstream_response_length=$upstream_response_length request_id=$req_id
+        request_time=$request_time proxy_upstream_name=$proxy_upstream_name
+        proxy_alternative_upstream_name=$proxy_alternative_upstream_name
+        upstream_response_time=$upstream_response_time
+        upstream_status=$upstream_status upstream_connect_time=$upstream_connect_time
+        upstream_header_time=$upstream_header_time
+        ssl_protocol=$ssl_protocol
+      ssl-protocols: TLSv1.2 TLSv1.3
+      allow-snippet-annotations: true
+      http-snippet: |-
+      
+        server {	
+          listen 2443;	
+          return 308 https://$host$request_uri;	
+        }
+      proxy-real-ip-cidr: 10.0.0.0/16
+      use-forwarded-headers: "true"
+    electionID: "ingress-controller-v1"
+    ingressClassResource:
+      name: ingress-nginx
+      enabled: true
+      default: false
+      controllerValue: "k8s.io/ingress-nginx"
+    ingressClass: ingress-nginx # For backwards compatibility with ingress.class annotation.
+    kind: Deployment
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    tolerations: []
+    nodeSelector: {}
+    replicaCount: 3
+    autoscaling:
+      enabled: false
+      minReplicas: 3
+      maxReplicas: 11
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+    service:
+      enabled: true
+      external:
+        enabled: true
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:ap-southeast-1:214259409527:certificate/05cb0b47-7ea4-4d3f-a5df-ce530e8719a3
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
+        service.beta.kubernetes.io/aws-load-balancer-type: external
+        service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+        service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+        service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+        service.beta.kubernetes.io/aws-load-balancer-type: nlb
+      ports:
+        http: 80
+        https: 443
+      targetPorts:
+        http: http
+        https: http
+      externalTrafficPolicy: Local
+      internal:
+        enabled: false
+        annotations:
+          service.beta.kubernetes.io/aws-load-balancer-internal: true
+          service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+          service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
+          service.beta.kubernetes.io/aws-load-balancer-type: nlb
+          service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+          service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
+          service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:ap-southeast-1:214259409527:certificate/05cb0b47-7ea4-4d3f-a5df-ce530e8719a3
+        ports:
+          http: 80
+          https: 443
+        targetPorts:
+          http: http
+          https: http
+    admissionWebhooks:
+      enabled: true
+      patch:
+        enabled: true
+        nodeSelector: {}
+        tolerations: []
+    metrics:
+      enabled: true
+      service:
+        annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "10254"
+      serviceMonitor:
+        enabled: true
+  tcp:
+  udp:
+  portNamePrefix: ""
+  dhParam: ""

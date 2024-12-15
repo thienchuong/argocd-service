@@ -1,0 +1,82 @@
+serviceName: "my-service"
+revisionHistoryLimit: 3
+updateStrategy: {}
+replicaCount: 1
+image:
+  repository: xx.dkr.ecr.ap-southeast-1.amazonaws.com/service
+  tag: v1.0.77
+  pullPolicy: IfNotPresent
+migration:
+  enabled: false
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name:
+
+deployment:
+  enabled: true
+
+service:
+  enabled: true
+
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+
+securityContext: {}
+livenessProbe: {}
+readinessProbe: {}
+
+envFrom: []
+
+
+
+service: {}
+
+
+
+ingress: {}
+
+
+
+resources: {}
+
+lifecycle: {}
+  # postStart:
+  #   exec:
+  #     command: ["/usr/local/bin/mix", "ecto.migrate"]
+autoscaling: {}
+
+
+nodeSelector: {}
+
+
+tolerations: []
+
+
+affinity: {}
+
+extraVolumeMounts: []
+  # - mountPath: /app/key.pem
+  #   name: file-config
+  #   subPath: key.pem
+extraVolumes: []
+  # - name: file-config
+  #   configMap:
+  #     defaultMode: 420
+  #     name: littleauth-file-config
+
+configmap:
+  enabled: false
+
+externalsecret:
+  enabled: false
+nsExternalsecret:
+  enabled: false
+  ns: ""

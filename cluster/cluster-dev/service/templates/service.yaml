@@ -1,0 +1,42 @@
+{{ range $clusterName, $applicationNames := .Values.clusters }}
+{{- range $applicationName, $applicationOption := $applicationNames }}
+{{- if $applicationOption.enabled }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: {{ $applicationName }}-apps
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - applicationName: {{ $applicationName }}
+  template:
+    metadata:
+      name: {{ $applicationName }}
+    spec:
+      project: {{ $.Values.spec.project }}
+      source:
+        repoURL: {{ $.Values.spec.source.repoURL }}
+        targetRevision: {{ $.Values.spec.source.targetRevision }}
+        path: values/{{ $.Values.spec.destination.cluster }}/{{ $.Values.spec.destination.folder }}/{{`{{applicationName}}`}}
+      destination:
+        namespace: {{ $.Values.spec.destination.namespace }}
+        server: {{ $.Values.spec.destination.server }}
+      {{- if $applicationOption.autoSync }}
+      syncPolicy:
+        automated:
+          prune: false
+        syncOptions:
+          - CreateNamespace=true
+      {{- end }}
+      ignoreDifferences:
+      - group: apps
+        kind: Deployment
+        namespace: prod
+        jsonPointers:
+        - /spec/replicas
+{{- end }}
+{{- end }}
+{{- end }}

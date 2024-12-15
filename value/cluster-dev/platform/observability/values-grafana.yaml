@@ -1,0 +1,104 @@
+grafana:
+  enabled: true
+  fullnameOverride: "grafana"
+  tolerations: []
+  nodeSelector: {}
+  ingress:
+    enabled: true
+    ingressClassName: ingress-nginx
+    hosts:
+      - grafana.chuong.click
+  grafana.ini:
+    server:
+      root_url: https://grafana.chuong.click
+    auth:
+      oauth_allow_insecure_email_lookup: true
+      disable_login_form: false
+    log:
+      mode: console
+      level: debug
+    auth.basic:
+      enabled: true
+    security:
+      admin_user: admin
+      admin_password: '111222' # Change this password. this is just an example
+    users:
+      allow_sign_up: true
+      viewers_can_edit: true
+    auth.google:
+      enabled: false
+      client_id: xx
+      client_secret: xx
+      scopes: openid email profile https://www.googleapis.com/auth/cloud-identity.groups.readonly
+      auth_url: https://accounts.google.com/o/oauth2/auth
+      token_url: https://accounts.google.com/o/oauth2/token
+      api_url: https://www.googleapis.com/oauth2/v1/userinfo
+      allowed_domains: chuong.click
+      hosted_domain: chuong.click
+      skip_org_role_sync: false
+      role_attribute_path: contains(groups[*], 'devops@chuong.click') && 'Admin' || 'Viewer'
+      allow_assign_grafana_admin: true
+      oauth_skip_org_role_update_sync: false
+  assertNoLeakedSecrets: false
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          url: http://observability-kube-prometh-prometheus:9090
+        - name: Loki
+          type: loki
+          url: http://loki-gateway.loki.svc.cluster.local:80
+  deploymentStrategy:
+    type: Recreate
+  persistence:
+    type: pvc
+    enabled: true
+    storageClassName: gp2
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: "kubernetes"
+          orgId: 1
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /tmp/dashboards/kubernetes
+        - name: "ingress-nginx"
+          orgId: 1
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /tmp/dashboards/ingress-nginx
+        - name: "access-management"
+          orgId: 1
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /tmp/dashboards/access-management
+        - name: "rds"
+          orgId: 1
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /tmp/dashboards/rds
+  sidecar:
+    datasources:
+      enabled: true
+    dashboards:
+      enabled: true
+      folderAnnotation: grafana_folder
+      label: grafana_dashboard
+      folder: /tmp/dashboards
+      provider:
+        allowUiUpdates: true
+        foldersFromFilesStructure: true

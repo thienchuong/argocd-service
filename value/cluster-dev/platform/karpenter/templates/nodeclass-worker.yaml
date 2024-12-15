@@ -1,0 +1,27 @@
+apiVersion: karpenter.k8s.aws/v1beta1
+kind: EC2NodeClass
+metadata:
+  name: worker-service
+spec:
+  amiFamily: Bottlerocket
+  role: "Karpenter-cluster-dev-2024121414392788340000001c"
+  subnetSelectorTerms:
+    - id: subnet-0cc979119db042a1b
+    - id: subnet-042d268ab22b5c7e3
+    - id: subnet-0acaf30a31a939b37
+  securityGroupSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: cluster-dev
+  tags:
+    Name: karpenter-worker-service
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 20Gi
+        volumeType: gp3
+        deleteOnTermination: true
+    - deviceName: /dev/xvdb
+      ebs:
+        volumeSize: 40Gi
+        volumeType: gp3
+        deleteOnTermination: true
