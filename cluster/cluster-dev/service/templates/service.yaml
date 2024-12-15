@@ -20,7 +20,7 @@ spec:
       source:
         repoURL: {{ $.Values.spec.source.repoURL }}
         targetRevision: {{ $.Values.spec.source.targetRevision }}
-        path: values/{{ $.Values.spec.destination.cluster }}/{{ $.Values.spec.destination.folder }}/{{`{{applicationName}}`}}
+        path: value/{{ $.Values.spec.destination.cluster }}/{{ $.Values.spec.destination.folder }}/{{`{{applicationName}}`}}
       destination:
         namespace: {{ $.Values.spec.destination.namespace }}
         server: {{ $.Values.spec.destination.server }}
