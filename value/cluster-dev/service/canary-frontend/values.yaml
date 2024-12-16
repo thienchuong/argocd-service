@@ -15,8 +15,8 @@ service:
   podAnnotations:
     reloader.stakater.com/auto: "true"
   image:
-    repository: 267583709295.dkr.ecr.ap-southeast-1.amazonaws.com/canary-frontend
-    tag: canary-123
+    repository: 267583709295.dkr.ecr.ap-southeast-1.amazonaws.com/frontend
+    tag: v-17
     pullPolicy: IfNotPresent
   lifecycle: {}
   envFrom:
@@ -51,27 +51,15 @@ service:
           target:
             type: Utilization
             averageUtilization: 50
-  nodeSelector:
-    worker: service
-  tolerations:
-    - key: services
-      effect: NoSchedule
-  livenessProbe:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 15
-    timeoutSeconds: 15
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 15
-    timeoutSeconds: 15
+  nodeSelector: {}
+  tolerations: []
+  livenessProbe: {}
+  readinessProbe: {}
   configmap:
     enabled: true
     data:
-      HELLO_MESSAGE: test change message hello
+      REACT_APP_SERVER_URL: 'http://backend'
+      REACT_APP_SERVER_PORT: '3000'
   topologySpreadConstraints:
     - maxSkew: 1
       topologyKey: topology.kubernetes.io/zone
