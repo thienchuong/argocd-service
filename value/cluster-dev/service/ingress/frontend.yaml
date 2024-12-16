@@ -17,4 +17,3 @@ spec:
                   name: http
   ingressClassName: ingress-nginx
   
-for i in $(seq 1 10); do curl -s --resolve frontend.chuong.click:443:52.74.87.207 frontend.chuong.click; done
