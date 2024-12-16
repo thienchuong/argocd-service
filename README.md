@@ -20,7 +20,7 @@
 ## Ingresses deployed by Argocd ( currently can not access because eks worker nodes are terminated for saving money)
 - [grafana](https://grafana.chuong.click/)
 - [argocd](https://argocd.chuong.click/)
-- [frontend](https://frontend.chuong.click/) 
+- [frontend](https://frontend.chuong.click/) (already running with ssl cert from AWS ACM)
 
 ## Repo structrue
 ```
