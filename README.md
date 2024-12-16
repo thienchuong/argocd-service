@@ -77,8 +77,8 @@
             │   ├── Chart.yaml
             │   └── values.yaml
             └── ingress
-                ├── canary-frontend.yaml
-                └── frontend.yaml
+                ├── canary-frontend.yaml <-- canary frontend ingress pointing to canary deployment
+                └── frontend.yaml        <-- main frontend ingress pointing to main deployment
 ```
 
 ## How this repo work
