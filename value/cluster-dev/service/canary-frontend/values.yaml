@@ -58,8 +58,8 @@ service:
   configmap:
     enabled: true
     data:
-      REACT_APP_SERVER_URL: 'http://backend'
-      REACT_APP_SERVER_PORT: '3000'
+      REACT_APP_SERVER_URL: 'http://backendd'
+      REACT_APP_SERVER_PORT: '30000'
   topologySpreadConstraints:
     - maxSkew: 1
       topologyKey: topology.kubernetes.io/zone
