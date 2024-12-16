@@ -16,7 +16,7 @@ service:
     reloader.stakater.com/auto: "true"
   image:
     repository: 267583709295.dkr.ecr.ap-southeast-1.amazonaws.com/backend
-    tag: v1.0.7
+    tag: v-1
     pullPolicy: IfNotPresent
   lifecycle: {}
   envFrom:
