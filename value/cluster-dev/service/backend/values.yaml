@@ -29,8 +29,8 @@ service:
   service:
     enabled: true
     type: ClusterIP
-    port: 8080
-    containerPort: 8080
+    port: 3000
+    containerPort: 3000
   ingress:
     enabled: false
   resources:
@@ -51,23 +51,10 @@ service:
           target:
             type: Utilization
             averageUtilization: 50
-  nodeSelector:
-    worker: service
-  tolerations:
-    - key: services
-      effect: NoSchedule
-  livenessProbe:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 15
-    timeoutSeconds: 15
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 15
-    timeoutSeconds: 15
+  nodeSelector: {}
+  tolerations: []
+  livenessProbe: {}
+  readinessProbe: {}
   configmap:
     enabled: true
     data:
