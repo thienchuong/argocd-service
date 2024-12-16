@@ -58,7 +58,7 @@ service:
   configmap:
     enabled: true
     data:
-      SERVER_URL: backend
+      SERVER_URL: backend:3000
   topologySpreadConstraints:
     - maxSkew: 1
       topologyKey: topology.kubernetes.io/zone
